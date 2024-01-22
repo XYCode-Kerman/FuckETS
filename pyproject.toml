@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "fuckets"
+version = "0.0.1"
+description = "一个自动完成E听说的程序。"
+authors = ["XYCode <xycode-xyc@outlook.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyautogui = "^0.9.54"
+pywinauto = "^0.6.8"
+rich = "^13.7.0"
+zhipuai = "^1.0.7"
+pytesseract = "^0.3.10"
+objprint = "^0.2.3"
+opencv-python = "^4.9.0.80"
+pyaudio = "^0.2.14"
+numpy = "^1.26.3"
+python-dotenv = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "ali"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+priority = "primary"
+
+
+[[tool.poetry.source]]
+name = "tencent"
+url = "https://mirrors.cloud.tencent.com/pypi/simple/"
+priority = "primary"
+
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
+priority = "default"
