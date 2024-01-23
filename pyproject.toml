@@ -18,6 +18,7 @@ opencv-python = "^4.9.0.80"
 pyaudio = "^0.2.14"
 numpy = "^1.26.3"
 python-dotenv = "^1.0.0"
+keyboard = "^0.13.5"
 
 [build-system]
 requires = ["poetry-core"]
