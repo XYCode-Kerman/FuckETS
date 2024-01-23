@@ -6,6 +6,7 @@ dotenv.load_dotenv()
 zhipuai_apikey = os.environ.get('ZHIPUAI_APIKEY')
 username = os.environ.get('username')
 password = os.environ.get('password')
+autologin = False
 
 # OCR
 tesseract_path = r'D:\Program Files\Tesseract-OCR\tesseract.exe'

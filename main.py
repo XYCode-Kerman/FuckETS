@@ -33,7 +33,8 @@ if __name__ == '__main__':
     window = pygetwindow.getActiveWindow()
     
     # # 登录
-    login.login(config.username, config.password)
+    if config.autologin:
+        login.login(config.username, config.password)
     
     # console.log('登录完成，请切换到你要完成的作业[仅限单词]，按下任意键继续。')
     # console.input('Press Enter to continue...')
