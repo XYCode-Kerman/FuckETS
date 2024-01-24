@@ -3,6 +3,8 @@ import os
 dotenv.load_dotenv()
 
 # Login
+az_speech_key = os.environ.get('AZURE_SPEECH_SUB_KEY')
+az_endpoint = os.environ.get('AZURE_ENDPOINT')
 zhipuai_apikey = os.environ.get('ZHIPUAI_APIKEY')
 username = os.environ.get('username')
 password = os.environ.get('password')

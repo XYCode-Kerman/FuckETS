@@ -50,7 +50,7 @@ def select_a_audio_device() -> int:
 
 def test_audio_record(device_index: int, device_channels: int) -> bool:
     """测试录制声音。将获取到的声音大小以进度条的方式显示。"""
-    stream = audio.open(format=pyaudio.paInt16, channels=device_channels, rate=44100, input=True, frames_per_buffer=256, input_device_index=device_index)
+    stream = audio.open(format=pyaudio.paInt16, channels=device_channels, rate=44100, input=True, frames_per_buffer=64, input_device_index=device_index)
     stream.start_stream()
     
     # 获取音量大小
@@ -58,7 +58,7 @@ def test_audio_record(device_index: int, device_channels: int) -> bool:
         task = progress.add_task("测试录音...", total=100)
         
         while True:
-            data = stream.read(256)
+            data = stream.read(64, exception_on_overflow=False)
             data = np.fromstring(data, dtype=np.int16)
 
             volume = np.median(np.mean(data)) * 10
@@ -68,7 +68,9 @@ def test_audio_record(device_index: int, device_channels: int) -> bool:
             # 按下Enter键表示通过，Space键表示失败
             if keyboard.is_pressed('enter'):
                 stream.stop_stream()
+                audio.terminate()
                 return True
             elif keyboard.is_pressed('space'):
                 stream.stop_stream()
+                audio.terminate()
                 return False
