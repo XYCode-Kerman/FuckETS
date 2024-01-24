@@ -1,4 +1,5 @@
 import pyaudio
+import keyboard
 import numpy as np
 import wave
 import audioop
@@ -23,7 +24,7 @@ def select_a_audio_device() -> int:
     
     # 过滤出输出设备
     devices = [
-        device for device in devices if device['maxOutputChannels'] > 0
+        device for device in devices if device['maxInputChannels'] > 0
     ]
     
     devices_table = Table(title="Available Audio Devices")
@@ -31,11 +32,11 @@ def select_a_audio_device() -> int:
     devices_table.add_column("名称", style="green")
     devices_table.add_column("声道", style="magenta")
     
-    for device in devices:
+    for index, device in enumerate(devices):
         devices_table.add_row(
             str(device["index"]),
             device["name"],
-            str(device["maxOutputChannels"])
+            str(device["maxInputChannels"])
         )
     
     console.log("请选择一个输出音频的设备供录音。")
@@ -43,7 +44,7 @@ def select_a_audio_device() -> int:
     
     device_index = Prompt.ask("请输入设备索引", default="0", choices=[str(i["index"]) for i in devices])
     device_index = int(device_index)
-    device_channels = devices[device_index]["maxOutputChannels"]
+    device_channels = list(filter(lambda x: x["index"] == device_index, devices))[0]['maxInputChannels']
     
     return device_index, device_channels
 
@@ -57,9 +58,19 @@ def test_audio_record(device_index: int, device_channels: int) -> bool:
         task = progress.add_task("测试录音...", total=100)
         
         while True:
-            data = stream.read(64)
+            data = stream.read(64, exception_on_overflow=False)
             data = np.fromstring(data, dtype=np.int16)
 
-            volume = np.max(np.mean(data))
+            volume = np.median(np.mean(data)) * 10
             
             progress.update(task, completed=volume)
+            
+            # 按下Enter键表示通过，Space键表示失败
+            if keyboard.is_pressed('enter'):
+                stream.stop_stream()
+                audio.terminate()
+                return True
+            elif keyboard.is_pressed('space'):
+                stream.stop_stream()
+                audio.terminate()
+                return False

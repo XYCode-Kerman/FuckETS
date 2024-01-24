@@ -10,6 +10,8 @@ FuckETS是一个基于[PyAutoGUI](https://github.com/asweigart/pyautogui)的自�
 
 ## 如何使用 | How to use?
 
+> 注意：您需要手动下载`triton-2.0.0-cp310-cp310-win_amd64.whl`和`torch-2.0.1+cu117-cp39-cp39-win_amd64.whl`，然后再使用`poetry install`安装。
+
 首先，使用`git clone https://github.com/XYCode-Kerman/FuckETS.git`命令将本仓库克隆到本地。
 
 然后，确保你安装了`python3.9`和`poetry`，使用`poetry install`安装依赖。
@@ -46,6 +48,21 @@ tesseract_path = r'此处填入你的tesseract.exe的路径'
 |          password          |               自动从环境变量中读取密码                |               DO NOT UPDATE IT               |
 |       tesseract_path       |        用于提供OCR功能的`tesseract.exe`的位置         | D:\Program Files\Tesseract-OCR\tesseract.exe |
 | always_A_in_listening_part | 在听力部分始终选择A<br />注意：该选项将会在近期被移除 |                     True                     |
+
+## 常见问题 | FAQs
+
+Q：使用`poetry install`时出现有关`triton`的错误。
+
+A：这是由于本程序使用的`openai-whisper`库的依赖`triton`没有官方Windows版本导致的，你可以在网络上下载`triton`的第三方编译包。
+
+Q：`whisper`模型识别语音的速度很慢。
+
+A：请尝试在 Python REPL 环境中运行如下命令，并检查输出结果是否为`True`。
+
+````python
+import torch
+torch.cuda.is_available()
+````
 
 ## 法律声明 | Legal Disclaimer
 

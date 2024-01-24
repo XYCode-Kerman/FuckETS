@@ -43,7 +43,7 @@ class GLMAdapter(Adapter):
         
         params = ChatGLM6bParams(
             prompt=[
-                {"role": "user", "content": "你擅长英语，请根据用户给出的题目在ABCD四个选项间选择出你认为最正确的答案。请不要在回答中增加任何除ABCD四个选项外的字符。"},
+                {"role": "user", "content": "你擅长英语，请根据用户给出的题目在ABCD四个选项间选择出你认为最正确的答案。请不要在回答中增加任何除ABCD四个选项外的字符。注意：给你的题目来源于OCR的结果，可能存在错误。"},
                 # {"role": "assistant", "content": "好的。"},
                 {"role": "user", "content": prompt}
             ],
