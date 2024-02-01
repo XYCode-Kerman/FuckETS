@@ -8,6 +8,7 @@ import utils
 import pyautogui as pag
 from pygetwindow._pygetwindow_win import Win32Window
 from question_type.based_question import BasedQuestion
+from concurrent.futures import ThreadPoolExecutor
 from typing import Literal, Union, Dict
 
 from rich import print
@@ -92,12 +93,19 @@ class TranslationQuestion(BasedQuestion):
             )
         )
 
+        pool = ThreadPoolExecutor(max_workers=8)
+
         title, A, B, C, D = (
-            pytesseract.image_to_string(title_img, 'chi_sim'),
-            pytesseract.image_to_string(A_img, 'chi_sim'),
-            pytesseract.image_to_string(B_img, 'chi_sim'),
-            pytesseract.image_to_string(C_img, 'chi_sim'),
-            pytesseract.image_to_string(D_img, 'chi_sim'),
+            # pytesseract.image_to_string(title_img, 'chi_sim'),
+            # pytesseract.image_to_string(A_img, 'chi_sim'),
+            # pytesseract.image_to_string(B_img, 'chi_sim'),
+            # pytesseract.image_to_string(C_img, 'chi_sim'),
+            # pytesseract.image_to_string(D_img, 'chi_sim')
+            pool.submit(pytesseract.image_to_string, title_img, 'chi_sim').result(),
+            pool.submit(pytesseract.image_to_string, A_img, 'chi_sim').result(),
+            pool.submit(pytesseract.image_to_string, B_img, 'chi_sim').result(),
+            pool.submit(pytesseract.image_to_string, C_img, 'chi_sim').result(),
+            pool.submit(pytesseract.image_to_string, D_img, 'chi_sim').result(),
         )
         
         table = Table(show_header=True, header_style='bold')
@@ -130,13 +138,13 @@ class TranslationQuestion(BasedQuestion):
         # 播放声音
         pag.click(audio_play_button.x, audio_play_button.y)
 
-        return utils.audio2text(2).lower().split(' ')[0]
+        return utils.audio2text(2).lower()
 
     def answer(self) -> None:
         self.ocr()
         
         if self.is_listening_part():
-            time.sleep(2)
+            time.sleep(3)
             self.title = self.listen()
         
         option = self.adapter(self.title, *self.options.values())

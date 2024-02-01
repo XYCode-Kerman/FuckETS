@@ -2,6 +2,8 @@ import pyautogui as pag
 import pygetwindow
 import pickle
 import pathlib
+import pytesseract
+import re
 import login
 import locate_images
 import answer
@@ -17,6 +19,7 @@ import question_type.speaking
 
 from rich import print
 from rich.table import Table
+from rich.progress import Progress, TextColumn, ProgressColumn, TimeRemainingColumn, TimeElapsedColumn, TransferSpeedColumn, BarColumn
 from rich.console import Console
 from rich.prompt import Prompt, Confirm
 from rich.markdown import Markdown
@@ -113,9 +116,20 @@ if __name__ == '__main__':
     adapter_index = get_quesition_adapter()
     
     # ===== 开始答题 =====
+    window = open_window()
+    origin = window.left, window.top
+
+    question_count = pytesseract.image_to_string(pag.screenshot().crop((420 + origin[0], 30 + origin[1], 580 + origin[0], 60 + origin[1])))
+    print(question_count)
+    # 过滤出1~9和/字符
+    question_count = re.search(r'[0-9]*\/[0-9]*', question_count).group(0).split('/')
+    completed_question, total_question = int(question_count[0]), int(question_count[1])
+    
+    console.log(f'现在已做 {completed_question} 题，共 {total_question} 题')
     console.rule('开始答题', characters='=')
     console.log('[red]警告：答题过程中请勿[r]移动鼠标[/r]、[r]按下键盘上的按键[/r]或进行任何可能影响答题的行为！')
-    window = open_window()
-    while True: 
+    while True:
         answer_question(window, quesition_type_index, adapter_index)
+        
+        completed_question += 1
         time.sleep(2)
