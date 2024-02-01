@@ -144,8 +144,8 @@ class TranslationQuestion(BasedQuestion):
         self.ocr()
         
         if self.is_listening_part():
-            time.sleep(3)
-            self.title = self.listen()
+            console.log("在 without_whisper 分支中不支持听力部分")
+            raise RuntimeError("在 without_whisper 分支中不支持听力部分")
         
         option = self.adapter(self.title, *self.options.values())
         

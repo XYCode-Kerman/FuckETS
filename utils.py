@@ -46,30 +46,6 @@ def record(time: int) -> pathlib.Path:
     
     return output_file
 
-def audio2text(time: int) -> str:
-    import whisper
-    import torch
-    model = whisper.load_model('base', 'cuda:0' if torch.cuda.is_available() else 'cpu')
-    
-    # 开始录音
-    record_file = record(time)
-    
-    # 声音处理
-    console.log('正在调用 Whisper AI 进行语音识别。')
-    audio = whisper.load_audio(record_file.__str__())
-    audio = whisper.pad_or_trim(audio)
-    
-    mel = whisper.log_mel_spectrogram(audio).to(model.device)
-    _, probs = model.detect_language(mel)
-
-    # decode the audio
-    options = whisper.DecodingOptions()
-    result = whisper.decode(model, mel, options)
-    
-    console.log(f'[grey50]Whisper AI 识别结果：[/grey50]{result.text}')
-
-    return result.text
-
 def tts(az_speech_endpoint: str, az_speech_key: str, text: str, speaker: str = 'en-US-RyanMultilingualNeural') -> None:
     console.log('语音合成中')
     # This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
